@@ -63,11 +63,11 @@ populationData <- populationData %>%
 populationData <- populationData %>% rename(PostalCode = `Postal Code`)
 
 ### total number of random points to display on map
-numPts <- 12000
+totalMapPoints <- 8000
 
 ### calculate proportional points per region and points per state
 populationData <- populationData %>%
-  mutate(ptsPerRegion = numPts * per_region,
+  mutate(ptsPerRegion = totalMapPoints * per_region,
          ptsPerState = ptsPerRegion * per_state)
 
 # populationData %>% select(state, region, contains('pts'))
@@ -83,12 +83,30 @@ usStatesACS2017sp4236mrg <- merge(usStatesACS2017sp4236, populationData, by.x = 
 spList <- list()  # list to hold all spdf's for each state
 for (i in 1:nrow(usStatesACS2017sp4236mrg)) {
   currentState <- usStatesACS2017sp4236mrg[i,]
-  numPoints <- currentState$ptsPerState
+  numPoints <- floor(currentState$ptsPerState)
+  name = currentState@data$NAME
+  region <- currentState@data$region
+  abbrev <- currentState@data$STUSPS
+  groupVec <- character()
+  classVec <- character()
+  currPew <- genderStrictness %>% filter(F_CREGION_FINAL == region)
+  totPts <- 0
+  for (i in 1:nrow(currPew)) {
+    currPoints <- floor(numPoints * currPew[i,'per']) %>% pull
+    totPts <- totPts + currPoints
+    if (i == nrow(currPew) & totPts < numPoints ) {
+      currPoints <- currPoints + (numPoints - totPts)
+    }
+    classVec <- append(classVec, rep(as.character(currPew[i,'class']), currPoints))
+    groupVec <- append(groupVec, rep(as.character(currPew[i,]$F_SEX_FINAL), currPoints))
+  }
   currSample <- spsample(x = currentState, n = numPoints, geometry = 'polygon', type = 'random')
   spdf <- SpatialPointsDataFrame(coords = currSample@coords, 
-                                   data = data.frame(STUSPS = rep(currentState@data$STUSPS, numPoints),
-                                                     NAME = rep(currentState@data$NAME, numPoints),
-                                                     region = rep(currentState@data$region, numPoints)), proj4string = CRS(prj4326))
+                                   data = data.frame(STUSPS = rep(abbrev, numPoints),
+                                                     NAME = rep(name, numPoints),
+                                                     region = rep(region, numPoints),
+                                                     group = groupVec,
+                                                     class = classVec), proj4string = CRS(prj4326))
   spList <- append(spList, spdf)
   #randomList <- append(randomList, samp)
 }
@@ -97,7 +115,12 @@ for (i in 2:length(spList)) {
   randomSPDF <- rbind(randomSPDF, spList[[i]])
 }
 
-geojson_write(randomSPDF, geometry = 'polygon', file = 'json/random_points.geojson', overwrite = T)
+femaleSPDF <- randomSPDF[randomSPDF$group=='Female',]
+maleSPDF <- randomSPDF[randomSPDF$group=='Male',]
+
+
+geojson_write(femaleSPDF, geometry = 'polygon', file = 'json/female_random_points.geojson', overwrite = T)
+geojson_write(maleSPDF, geometry = 'polygon', file = 'json/male_random_points.geojson', overwrite = T)
 
 
 

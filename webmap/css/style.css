@@ -1,5 +1,5 @@
-#mapdiv {
-  height: 100vh;
+#map1 {
+  height: 800px;
 }
 
 .container-fluid {
@@ -31,20 +31,21 @@
   fill-opacity: 1;
 }
 
-
 .legend {
-    line-height: 18px;
-    color: #555;
-    background-color: #fff;
-    padding: 5px;
-    border-radius: 3px;
+  line-height: 18px;
+  color: #555;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #eee;
+  border: 1px solid #ccc;
 }
 .legend i {
-    width: 60px;
-    height: 18px;
-    float: left;
-    margin-right: 8px;
-    opacity: 0.7;
+  width: 60px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
 }
 
 .legend span {
@@ -61,14 +62,22 @@
 }
 
 .legend-labels span {
-    padding-left: 10px;
+  text-align: center;
+}
+
+.legend .color-bar {
+  width: 100px;
 }
 
 .toggle {
   padding: 10px;
   background-color: white;
   list-style-type: none;
-
+  background-color: #eee;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  font-size: 1.3em;
+  color: #444;
 }
 
 .toggle ul {
