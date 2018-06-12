@@ -63,3 +63,21 @@
 .legend-labels span {
     padding-left: 10px;
 }
+
+.toggle {
+  padding: 10px;
+  background-color: white;
+  list-style-type: none;
+
+}
+
+.toggle ul {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+
+}
+
+.toggle ul input {
+  margin-right: 10px;
+}

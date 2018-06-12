@@ -54,6 +54,31 @@ document.addEventListener('DOMContentLoaded', function(){
   //   position: 'left',
   //   autoPan: true,
   // }).addTo(mymap);
+  var toggle = L.control({position: 'topright'});
+  toggle.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info toggle'),
+      html;
+    html = '<ul>' +
+      '<li><input type="checkbox" class="Male" checked>Male</input></li>' +
+      '<li><input type="checkbox" class="Female" checked>Female</input></li>' +
+      '</ul>';
+
+    div.innerHTML = html;
+    return div;
+  };
+  toggle.addTo(mymap);
+
+  document.querySelectorAll('.toggle input').forEach(function(el) {
+    el.addEventListener('click', function(evt) {
+      console.log(evt.target, evt.target.value, evt.target.checked, evt.target.classList);
+      var targetClass = evt.target.classList[0];
+      if (evt.target.checked) {
+        document.querySelectorAll('.' + targetClass).forEach(function(m) {m.style.fillOpacity = '1';});
+      } else {
+        document.querySelectorAll('.' + targetClass).forEach(function(m) {m.style.fillOpacity = '0';});
+      }
+    });
+  });
 
   var legend = L.control({position: 'bottomright'});
   var legendTitle = 'Gun Control Strictness by Gender in the United States',
