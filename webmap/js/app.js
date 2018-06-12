@@ -1,54 +1,29 @@
-var _map,
-  usData,
-  groupAData,
-  groupBData,
-  _ctlAttribute,
-  _toggle,
-  _legend,
-  _pewData,
-  _regions = ['South', 'Northeast', 'Midwest', 'West'],
-  _groups = ['Male', 'Female'],
-  geoJSONFiles = [
-    './data/states_pop.geojson',
-    './data/female_random_points.geojson',
-    './data/male_random_points.geojson'
-  ],
-  _pewFile = './data/gender_strictness.json',
-  geojsonData = [],
-  mapID1 = 'map1',
-  mapID2,
-  mapID3,
-  mapID4,
-  mapID5;
+var mapID1 = 'map1',
+  mapID2 = 'map2',
+  mapID3 = 'map3'
+  mapID4 = 'map4',
+  mapID5 = 'map5';
+// usData,
+// groupAData,
+// groupBData,
+// geojsonData = [],
 
-var groupAFillColors = {
-  'low': '#e7e1ef',
-  'neutral': '#c994c7',
-  'high': '#dd1c77'
-};
-var groupBFillColors = {
-  'low': '#fee8c8',
-  'neutral': '#fdbb84',
-  'high': '#e34a33'
-};
 
-var groupFillOpacity = {
-  'low': 0.25,
-  'neutral': 0.5,
-  'high': 0.75
-};
-
-var _usData,
-  _groupAData,
-  _groupBData,
-  _lyrUS,
-  _lyrGroupA,
-  _lyrGroupB,
-  _groupLabels,
-  _groupColors;
 
 function GVMap() {
   var _gvmap = {};
+
+  var _map,
+    _usData,
+    _groupAData,
+    _groupBData,
+    _lyrUS,
+    _lyrGroupA,
+    _lyrGroupB,
+    _groupLabels,
+    _groupColors,
+    _toggle,
+    _legend;
 
   _gvmap.renderMap = function(mapID) {
     _map = L.map(mapID, {
@@ -77,7 +52,6 @@ function GVMap() {
       }
     }).addTo(_map);
     _lyrUS.bringToBack();
-    // _map.fitBounds(_lyrUS.getBounds());
     _map.setZoom(5);
 
     // load groupA layer
@@ -126,8 +100,6 @@ function GVMap() {
     _ctlAttribute = L.control.attribution({
       position: 'bottomleft'
     });
-    _ctlAttribute.addAttribution('<a href="https://www.openstreetmap.org/">OSM</a>');
-    _ctlAttribute.addAttribution('<a href="http://datavis.thebirdery.com">CBIRD</a>')
     _ctlAttribute.addTo(_map);
   };
 
@@ -209,27 +181,22 @@ function GVMap() {
 };
 
 
-function addEventListeners() {
+function addEventListeners(mapID) {
+  var mapID = '#' + mapID;
   // toggle
-  document.querySelectorAll('.toggle input').forEach(function(el) {
+  document.querySelectorAll(mapID + ' .toggle input').forEach(function(el) {
     el.addEventListener('click', function(evt) {
-      console.log(evt.target, evt.target.value, evt.target.checked, evt.target.classList);
+      //console.log(evt.target, evt.target.value, evt.target.checked, evt.target.classList);
       var targetClass = evt.target.classList[0];
       if (evt.target.checked) {
-        document.querySelectorAll('.' + targetClass).forEach(function(m) {m.style.fillOpacity = '1';});
+        document.querySelectorAll(mapID + ' .' + targetClass).forEach(function(m) {m.style.fillOpacity = '1';});
       } else {
-        document.querySelectorAll('.' + targetClass).forEach(function(m) {m.style.fillOpacity = '0';});
+        document.querySelectorAll(mapID + ' .' + targetClass).forEach(function(m) {m.style.fillOpacity = '0';});
       }
     });
   });
 };
 
-
-Array.prototype.unique = function() {
-  return this.filter(function (value, index, self) {
-    return self.indexOf(value) === index;
-  });
-}
 
 // we need a function to load files
 // done is a "callback" function
@@ -242,52 +209,90 @@ var loadFile = function (filePath, done) {
   xhr.send();
 };
 
-// loop through each file
-var count = 0;
-geoJSONFiles.forEach(function (file, i) {
-  console.log(i);
-  loadFile(file, function (responseText) {
-    count += 1;
-    console.log(count, geojsonData);
-    geojsonData[i] = JSON.parse(responseText);
-    // console.log(i, geojsonData[i]);
-    if (count === geoJSONFiles.length) {
-      getPewData(geojsonData);
-    }
+function loadData(geoJSONFiles, mapObj) {
+  var geojsonData = [];
+  // loop through each file
+  var count = 0;
+  geoJSONFiles.forEach(function (file, i) {
+    loadFile(file, function (responseText) {
+      count += 1;
+      console.log(count, geojsonData);
+      geojsonData[i] = JSON.parse(responseText);
+      if (count === geoJSONFiles.length) {
+        loadMaps(geojsonData, mapObj);
+      }
+    });
   });
-});
+};
 
-function getPewData(geojsonData) {
-  loadFile(_pewFile, function(responseText) {
-    _pewData = JSON.parse(responseText);
-    loadMaps(geojsonData, _pewData)
-    console.log(geojsonData, _pewData);
-  });
-}
-
-function loadMaps(geojsonData, _pewData) {
+function loadMaps(geojsonData, mapObj) {
+  var usData, groupAData, groupBData;
   geojsonData.forEach(function(geojson) {
     console.log(geojson.features[0].geometry.type);
     if (geojson.features[0].geometry.type === 'MultiPolygon') {
       usData = geojson;
-    } else if (geojson.features[0].properties.group === 'Female') {
+    } else if (geojson.features[0].properties.group === mapObj.groupKey) {
       groupAData = geojson;
     } else {
       groupBData = geojson;
     }
   });
   var map = GVMap();
-  map.groupLabels(['Female', 'Male']);
-  map.groupColors([['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']]);
-  map.legendKeyLabels(['Less gun control', 'Laws are about right', 'More gun control'])
+  map.groupLabels(mapObj.gl);
+  map.groupColors(mapObj.gc);
+  map.legendKeyLabels(mapObj.lkl)
   map.usData(usData);
   map.groupAData(groupAData);
   map.groupBData(groupBData)
-  map.renderMap(mapID1);
+  map.renderMap(mapObj.mapID);
   map.renderLayers();
   map.addToggle();
-  map.legendTitle('Gun Control Strictness by Gender in the United States');
+  map.legendTitle(mapObj.lt);
   map.addLegend();
-  addEventListeners();
-
+  addEventListeners(mapObj.mapID);
 };
+
+var geoJSONFiles = [
+  './data/states_pop.geojson',
+  './data/female_random_points.geojson',
+  './data/male_random_points.geojson'
+  ],
+  mapObj = {
+    mapID: 'map1',
+    gl: ['Female', 'Male'],
+    gc: [['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']],
+    lkl: ['Less gun control', 'Laws are about right', 'More gun control'],
+    lt: 'Gun Control Strictness by Gender in the United States',
+    groupKey: 'Female'
+}
+loadData(geoJSONFiles, mapObj);
+
+var geoJSONFiles = [
+  './data/states_pop.geojson',
+  './data/college_random_points.geojson',
+  './data/belowcollege_random_points.geojson'
+  ],
+  mapObj = {
+    mapID: 'map2',
+    gl: ['college', 'belowcollege'],
+    gc: [['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']],
+    lkl: ['Almost no one', 'In the middle', 'Almost everyone should'],
+    lt: 'Who Should Own Guns in the US by Education',
+    groupKey: 'college'
+}
+loadData(geoJSONFiles, mapObj);
+
+var geoJSONFiles = [
+  './data/states_pop.geojson',
+  './data/democrat_random_points.geojson',
+  './data/republican_random_points.geojson'
+  ],
+  mapObj = {
+    mapID: 'map3',
+    gl: ['Democrat', 'Republican'],
+    gc: [['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']],
+    lkl: ['Almost all types', 'In the middle', 'Almost no types'],
+    lt: 'What Kinds of Guns Should be Legal n the US by Political Party',
+    groupKey: 'Democrat'
+}
+loadData(geoJSONFiles, mapObj);

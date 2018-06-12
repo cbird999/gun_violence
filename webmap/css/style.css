@@ -1,4 +1,4 @@
-#map1 {
+#map1, #map2, #map3, #map4, #map5 {
   height: 800px;
 }
 
@@ -6,6 +6,9 @@
   padding: 0 0 10 0;
 }
 
+.row {
+  margin-bottom: 30px;
+}
 .Male.high {
   fill: #fdae61;
   fill-opacity: 1;

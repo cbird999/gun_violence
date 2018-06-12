@@ -9,14 +9,7 @@ w25 <- read.spss('data/W25_Mar17/ATP W25.sav',
                  trim_values = T, 
                  duplicated.value.labels = 'condense')
 head(w25)
-
-w26 <- read.spss('data/W26_Apr17/ATP W26.sav', 
-                 use.value.labels = T, 
-                 to.data.frame = T, 
-                 trim.factor.names = T, 
-                 trim_values = T, 
-                 duplicated.value.labels = 'condense')
-head(w26)
+names(w25)
 
 # gender
 nrow(w25)
@@ -49,6 +42,9 @@ w25 <- w25 %>% mutate(region = case_when(
 genderStrictness <- w25 %>%
   select(F_CREGION_FINAL, F_SEX_FINAL, TOT_REGION, TOT_W25, GUNSTRICT_W25) %>%
   filter(GUNSTRICT_W25 != 'Refused') %>%
+  group_by(F_CREGION_FINAL) %>%
+  mutate(TOT_REGION = sum(TOT_W25)) %>%
+  ungroup() %>%
   group_by(F_CREGION_FINAL, F_SEX_FINAL, GUNSTRICT_W25) %>% 
   summarise(per = sum(TOT_W25) / first(TOT_REGION)) %>%
   mutate(class = case_when(
@@ -58,6 +54,55 @@ genderStrictness <- w25 %>%
   ))
 
 write_json(x = genderStrictness, 'json/gender_strictness.json', overwrite = T)
+
+# education/who
+# F_EDUCCAT_FINAL
+# recode
+educationWho <- w25 %>%
+  mutate(education = case_when(F_EDUCCAT_FINAL == 'College graduate+' ~ 'College or more',
+                               F_EDUCCAT_FINAL == 'Some college' ~ 'Less than college',
+                               F_EDUCCAT_FINAL == 'H.S. graduate or less' ~ 'Less than college'),
+         group = case_when(F_EDUCCAT_FINAL == 'College graduate+' ~ 'college',
+                           F_EDUCCAT_FINAL == 'Some college' ~ 'belowcollege',
+                           F_EDUCCAT_FINAL == 'H.S. graduate or less' ~ 'belowcollege')) %>%
+  filter(GUNWHO_W25 != 'Refused') %>%
+  group_by(F_CREGION_FINAL) %>%
+  mutate(TOT_REGION = sum(TOT_W25)) %>%
+  ungroup() %>%
+  group_by(F_CREGION_FINAL, group, GUNWHO_W25) %>% 
+  summarise(per = sum(TOT_W25) / first(TOT_REGION)) %>%
+  mutate(class = case_when(GUNWHO_W25 == 'Almost everyone should' ~ 'high',
+                           GUNWHO_W25 == 'Almost no one should' ~ 'low',
+                           GUNWHO_W25 == 'Some people should, but most people should NOT' ~ 'neutral',
+                           GUNWHO_W25 == 'Most people should, but some people should NOT' ~ 'neutral'))
+
+write_json(x = educationWho, 'json/education_who.json', overwrite = T)
+
+# political/typegun
+# F_PARTY_FINAL/GUNTYPE_W25
+# recode
+politicalType <- w25 %>%
+  mutate(group = case_when(F_PARTY_FINAL == 'Democrat' ~ 'Democrat',
+                           F_PARTY_FINAL == 'Republican' ~ 'Republican',
+                           F_PARTY_FINAL == 'Something else' ~ 'Other',
+                           F_PARTY_FINAL == 'Independent' ~ 'Other')) %>%
+  filter(GUNTYPE_W25 != 'Refused', F_PARTY_FINAL != 'Refused', group != 'Other') %>%
+  group_by(F_CREGION_FINAL) %>%
+  mutate(TOT_REGION = sum(TOT_W25)) %>%
+  ungroup() %>%
+  group_by(F_CREGION_FINAL, group, GUNTYPE_W25) %>% 
+  summarise(per = sum(TOT_W25) / first(TOT_REGION)) %>%
+  mutate(class = case_when(GUNTYPE_W25 == 'Almost all types should' ~ 'high',
+                           GUNTYPE_W25 == 'Almost no types should' ~ 'low',
+                           GUNTYPE_W25 == 'Some types should, but most types should NOT' ~ 'neutral',
+                           GUNTYPE_W25 == 'Most types should, but some types should NOT' ~ 'neutral'))
+
+write_json(x = politicalType, 'json/political_type.json', overwrite = T)
+
+
+
+
+
 
 
 
@@ -109,3 +154,11 @@ w25 %>%
 # pew_download(area = 'socialtrends', file_id = 10345448)
 
 # w25 <- read_sav(file = 'data/W25_Mar17/ATP W25.sav', user_na = T)
+
+w26 <- read.spss('data/W26_Apr17/ATP W26.sav', 
+                 use.value.labels = T, 
+                 to.data.frame = T, 
+                 trim.factor.names = T, 
+                 trim_values = T, 
+                 duplicated.value.labels = 'condense')
+head(w26)

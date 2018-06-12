@@ -76,10 +76,13 @@ populationData <- populationData %>%
 ### project to 4236
 prj4326 <- '+proj=longlat +ellps=WGS84'
 usStatesACS2017sp4236 <- spTransform(usStatesACS2017, prj4326)
+usStatesACS2017sp4236 <- usStatesACS2017sp4236[!usStatesACS2017sp4236$NAME%in%c('American Samoa', 'Commonwealth of the Northern Mariana Islands', 'Puerto Rico', 'United States Virgin Islands'),]
+geojson_write(usStatesACS2017sp4236, geometry = 'polygon', file = 'json/states_pop.geojson', overwrite = T)
+
 ### merge states sp with population data frame on state abbreviation
 usStatesACS2017sp4236mrg <- merge(usStatesACS2017sp4236, populationData, by.x = 'STUSPS', by.y = 'PostalCode', all = F)
 
-#### find random points
+#### find random points for gender/strictness
 spList <- list()  # list to hold all spdf's for each state
 for (i in 1:nrow(usStatesACS2017sp4236mrg)) {
   currentState <- usStatesACS2017sp4236mrg[i,]
@@ -89,7 +92,8 @@ for (i in 1:nrow(usStatesACS2017sp4236mrg)) {
   abbrev <- currentState@data$STUSPS
   groupVec <- character()
   classVec <- character()
-  currPew <- genderStrictness %>% filter(F_CREGION_FINAL == region)
+  #currPew <- genderStrictness %>% filter(F_CREGION_FINAL == region)
+  currPew <- educationWho %>% filter(F_CREGION_FINAL == region)
   totPts <- 0
   for (i in 1:nrow(currPew)) {
     currPoints <- floor(numPoints * currPew[i,'per']) %>% pull
@@ -98,7 +102,7 @@ for (i in 1:nrow(usStatesACS2017sp4236mrg)) {
       currPoints <- currPoints + (numPoints - totPts)
     }
     classVec <- append(classVec, rep(as.character(currPew[i,'class']), currPoints))
-    groupVec <- append(groupVec, rep(as.character(currPew[i,]$F_SEX_FINAL), currPoints))
+    groupVec <- append(groupVec, rep(as.character(currPew[i,]$group), currPoints))
   }
   currSample <- spsample(x = currentState, n = numPoints, geometry = 'polygon', type = 'random')
   spdf <- SpatialPointsDataFrame(coords = currSample@coords, 
@@ -115,16 +119,18 @@ for (i in 2:length(spList)) {
   randomSPDF <- rbind(randomSPDF, spList[[i]])
 }
 
+
+### gender
 femaleSPDF <- randomSPDF[randomSPDF$group=='Female',]
 maleSPDF <- randomSPDF[randomSPDF$group=='Male',]
-
-
 geojson_write(femaleSPDF, geometry = 'polygon', file = 'json/female_random_points.geojson', overwrite = T)
 geojson_write(maleSPDF, geometry = 'polygon', file = 'json/male_random_points.geojson', overwrite = T)
 
-
-
-
+### education
+collegeSPDF <- randomSPDF[randomSPDF$group=='college',]
+belowcollegeSPDF <- randomSPDF[randomSPDF$group=='belowcollege',]
+geojson_write(collegeSPDF, geometry = 'polygon', file = 'json/college_random_points.geojson', overwrite = T)
+geojson_write(belowcollegeSPDF, geometry = 'polygon', file = 'json/belowcollege_random_points.geojson', overwrite = T)
 ########## may not need this #########
 #usStatesACS2017sf <- st_as_sf(usStatesACS2017)
 #usStatesACS2017sf4326 <- st_transform(usStatesACS2017sf, 4326)
