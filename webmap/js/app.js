@@ -62,7 +62,7 @@ function GVMap() {
   };
 
   _gvmap.renderLayers = function() {
-    // cload US state layer
+    // load US state layer
     _lyrUS = L.geoJSON(_usData,{
       style: function(feature) {
         return {
@@ -287,70 +287,7 @@ function loadMaps(geojsonData, _pewData) {
   map.renderLayers();
   map.addToggle();
   map.legendTitle('Gun Control Strictness by Gender in the United States');
-  map.addLegend()
-;  addEventListeners();
-
-
-
-
-
-
-  //     _regions.forEach(function(region) {
-  //       var pewRegion = _pewData.filter(function(d) {
-  //         return d.F_CREGION_FINAL === region
-  //       });
-  //       var currRegionPoints = lyrPoints.features.filter(function(d) {
-  //         return d.properties.region === region;
-  //       });
-  //       var currStates = currRegionPoints.map(function(d) {
-  //         return d.properties.STUSPS
-  //       });
-  //       currStates = currStates.unique();
-  //       // console.log(pewRegion, currRegionPoints, currStates);
-  //       currStates.forEach(function(state) {
-  //         statePoints = currRegionPoints.filter(function(d) {
-  //           return d.properties.STUSPS == state;
-  //         });
-  //         numPoints = statePoints.length;
-  //         currIndex = 0;
-  //         pewRegion.forEach(function(d) {
-  //           pewPoints = Math.floor(numPoints * d.per),
-  //             pewClass = d.class,
-  //             pewGroup = d.F_SEX_FINAL;
-  //           // console.log(pewPoints, pewClass, pewGroup);
-  //
-  //           endIndex = (currIndex + pewPoints) >= (numPoints - 1) ? (numPoints - 1) : (currIndex + pewPoints);
-  //           for (var i = currIndex; i < endIndex; i++) {
-  //             var lat = statePoints[i].geometry.coordinates[1],
-  //               lng = statePoints[i].geometry.coordinates[0];
-  //             var cm = L.circleMarker([lat, lng], {
-  //               radius: 2,
-  //               stroke: false,
-  //               fill: true,
-  //               // fillOpacity: getFillOpactity(pewGroup, pewClass),
-  //               // fillColor: getFillColor(pewGroup, pewClass),
-  //               className: (d.F_SEX_FINAL + ' ' + d.class)
-  //             });
-  //             cm.addTo(_map);
-  //             cm.bringToFront();
-  //           }
-  //           currIndex = endIndex;
-  //         })
-  //       });
-  //
-  //     });
-  //     // geojsonData[i].features.forEach((function(pt) {
-  //     //   var lat = pt.geometry.coordinates[1],
-  //     //     lng = pt.geometry.coordinates[0];
-  //     //   var cm = L.circleMarker([lat, lng], {
-  //     //     radius: 1
-  //     //     // className: (classArray[0] + ' ' + classArray[1])
-  //     //   });
-  //     //   cm.addTo(_map);
-  //     // }));
-  //   }
-  // } else {
-  //   _pewData = geojsonData[i];
-  // }
+  map.addLegend();
+  addEventListeners();
 
 };
