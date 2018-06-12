@@ -63,7 +63,7 @@ populationData <- populationData %>%
 populationData <- populationData %>% rename(PostalCode = `Postal Code`)
 
 ### total number of random points to display on map
-numPts <- 20000
+numPts <- 12000
 
 ### calculate proportional points per region and points per state
 populationData <- populationData %>%

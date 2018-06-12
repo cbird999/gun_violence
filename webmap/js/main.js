@@ -244,7 +244,15 @@ myFiles.forEach(function (file, i) {
           if (jsonData[i].features.length < 51) {
             lyrUS = L.geoJSON(jsonData[i],{
               style: function(feature) {
-                return { stroke: true, color: '#cccccc', weight: 2, fill: true, fillColor: 'white', fillOpacity: .9 }
+                return {
+                  stroke: true,
+                  color: '#cccccc',
+                  weight: 2,
+                  fill: true,
+                  fillColor: 'white',
+                  fillOpacity: .9,
+                  className: 'state'
+                }
               }
             }).addTo(mymap);
             lyrUS.bringToBack();
