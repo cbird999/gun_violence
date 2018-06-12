@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(foreign)\nlibrary(tidyverse)\nlibrary(jsonlite)\n\nw25 <- read.spss('data/W25_Mar17/ATP W25.sav', \n                 use.value.labels = T, \n                 to.data.frame = T, \n                 trim.factor.names = T, \n                 trim_values = T, \n                 duplicated.value.labels = 'condense')\nhead(w25)\n\nw26 <- read.spss('data/W26_Apr17/ATP W26.sav', \n                 use.value.labels = T, \n                 to.data.frame = T, \n                 trim.factor.names = T, \n                 trim_values = T, \n                 duplicated.value.labels = 'condense')\nhead(w26)\n\n# gender\nnrow(w25)\ngrep(pattern = 'sex', x = names(w25), ignore.case = T, value = T)\ngrep(pattern = 'region', x = names(w25), ignore.case = T, value = T)\ngrep(pattern = 'gun', x = names(w25), ignore.case = T, value = T)\ngrep(pattern = 'weight', x = names(w25), ignore.case = T, value = T)\nrange(w25$WEIGHT_W25)\nrange(w25$WEIGHT_W25W26, na.rm = T)\nsum(is.na(w25$WEIGHT_W25W26))\n\ndistinct(w25, F_CREGION_FINAL)\n\n### produce tables for maps\nw25 <- w25 %>% \n  mutate(TOT_W25 = nrow(w25) * WEIGHT_W25, TOT_W2526 = nrow(w25) * WEIGHT_W25W26) %>%\n  group_by(F_CREGION_FINAL) %>%\n  mutate(TOT_REGION = sum(TOT_W25)) %>%\n  ungroup() %>%\n  select(F_CREGION_FINAL, F_SEX_FINAL, TOT_REGION, TOT_W25, contains('GUN'), everything())\n\nw25 <- w25 %>% mutate(region = case_when(\n  F_CREGION_FINAL %in% regionS ~ 'S',\n  F_CREGION_FINAL %in% regionNE ~ 'NE',\n  `Postal Code` %in% regionMW ~ 'MW',\n  `Postal Code` %in% regionW ~ 'W'\n))\n\n# gender/strictness\ngenderStrictness <- w25 %>%\n  select(F_CREGION_FINAL, F_SEX_FINAL, TOT_REGION, TOT_W25, GUNSTRICT_W25) %>%\n  filter(GUNSTRICT_W25 != 'Refused') %>%\n  group_by(F_CREGION_FINAL, F_SEX_FINAL, GUNSTRICT_W25) %>% \n  summarise(per = sum(TOT_W25) / first(TOT_REGION)) %>%\n  mutate(class = case_when(\n    GUNSTRICT_W25 == 'Gun laws should be MORE strict than they are today' ~ 'high',\n    GUNSTRICT_W25 == 'Gun laws are about right' ~ 'neutral',\n    GUNSTRICT_W25 == 'Gun laws should be LESS strict than they are today' ~ 'low'\n  ))\n\nwrite_json(x = genderStrictness, 'json/gender_strictness.json', overwrite = T)\n\n\n\n\n\n\n\n#### not used ####\nw25 %>%\n  filter(is.na(WEIGHT_W25W26)) %>%\n  group_by(F_CREGION_FINAL, F_SEX_FINAL, GUNSTRICT_W25) %>% \n  summarise(tot = sum(TOT_W25)) %>%\n  print(n = Inf)\n\nw25 %>% \n  filter(!is.na(WEIGHT_W25W26)) %>%\n  group_by(F_CREGION_FINAL, F_SEX_FINAL, GUNSTRICT_W25) %>% \n  summarise(tot = sum(TOT_W2526)) %>%\n  print(n = Inf)\n#################\n\n#### not used ####\nsort(grep(pattern = 'gun', x = names(w26), ignore.case = T, value = T))\nw26 <- w26 %>% \n  mutate(TOT_W26 = nrow(w26) * WEIGHT_W26, TOT_W2526 = nrow(w26) * WEIGHT_W25W26)\n\nw26 %>%\n  filter(is.na(WEIGHT_W25W26)) %>%\n  group_by(F_CREGION_FINAL, F_SEX_FINAL, GUNSTRICT_W26) %>% \n  summarise(tot = sum(TOT_W26)) %>%\n  print(n = Inf)\n\nw25 %>% \n  filter(!is.na(WEIGHT_W25W26)) %>%\n  group_by(F_CREGION_FINAL, F_SEX_FINAL, GUNSTRICT_W25) %>% \n  summarise(tot = sum(TOT_W2526)) %>%\n  print(n = Inf)\n################\n\n#library(pewdata)\n#library(haven)\n\n#options('pew_name' = 'Christopher Cardinal',\n#        'pew_org' = 'Institute for the Study of Human Rights',\n##       'pew_phone' = '917-355-3550',\n#        'pew_email' = 'cbird@hypermeganet.com')\n\n\n# pew_download(area = 'socialtrends', file_id = 10345448)\n\n# w25 <- read_sav(file = 'data/W25_Mar17/ATP W25.sav', user_na = T)",
+    "created" : 1528574170813.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1589189210",
+    "id" : "ACC06522",
+    "lastKnownWriteTime" : 1528668247,
+    "last_content_update" : 1528668247225,
+    "path" : "/Volumes/GoogleDrive/My Drive/work/upwork/gun_violence/pew.R",
+    "project_path" : "pew.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

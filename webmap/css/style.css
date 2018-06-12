@@ -1,0 +1,65 @@
+#mapdiv {
+  height: 100vh;
+}
+
+.container-fluid {
+  padding: 0 0 10 0;
+}
+
+.Male.high {
+  fill: #beaed4;
+  fill-opacity: 1;
+}
+
+.Male.low {
+  fill: #fdc086;
+  fill-opacity: 1;
+}
+
+.Female.high {
+  fill: #ffff99;
+  fill-opacity: 1;
+}
+
+.Female.low {
+  fill: #386cb0;
+  fill-opacity: 1;
+}
+
+.neutral {
+  fill: #aaa;
+  fill-opacity: 1;
+}
+
+
+.legend {
+    line-height: 18px;
+    color: #555;
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+}
+.legend i {
+    width: 60px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
+.legend span {
+  float: left;
+  margin-right: 10px;
+  display: inline-block;
+  width: 60px;
+}
+
+.legend div {
+  clear: left;
+  height: 20px;
+  font-size: 14px;
+}
+
+.legend-labels span {
+    padding-left: 10px;
+}
