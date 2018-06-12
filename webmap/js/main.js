@@ -257,6 +257,7 @@ myFiles.forEach(function (file, i) {
             }).addTo(mymap);
             lyrUS.bringToBack();
             mymap.fitBounds(lyrUS.getBounds());
+            mymap.setZoom(5);
             lyrUS.eachLayer(function(l) {
               var props = l.feature.properties;
               var currentState = props.STUSPS,
