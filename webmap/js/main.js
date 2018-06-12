@@ -69,9 +69,9 @@ document.addEventListener('DOMContentLoaded', function(){
       html = '<h6 class="legend-title">' + legendTitle + '</h6>';
       html += '<div class="label-groupA">' +
         '<span>' + groupAName + '</span>' +
-        '<i style="background-color: #beaed4; opacity: 1"></i>' +
+        '<i style="background-color: #fdae61; opacity: 1"></i>' +
         '<i style="background-color: #aaa; opacity: 1"></i>' +
-        '<i style="background-color: #fdc086; opacity: 1"></i>' +
+        '<i style="background-color: #2b83ba; opacity: 1"></i>' +
       '</div>' +
       '<div class="legend-labels">' +
         '<span>&nbsp</span>' +
@@ -81,9 +81,9 @@ document.addEventListener('DOMContentLoaded', function(){
       '</div>' +
       '<div class="label-groupB">' +
         '<span>Female</span>' +
-        '<i style="background-color: #ffff99; opacity: 1"></i>' +
+        '<i style="background-color: #c2a5cf; opacity: 1"></i>' +
         '<i style="background-color: #aaa; opacity: 1"></i>' +
-        '<i style="background-color: #386cb0; opacity: 1"></i>' +
+        '<i style="background-color: #008837; opacity: 1"></i>' +
       '</div>';
       // html += '<span class="groupA">' + groupAName + '</span><span class="groupB">' + groupBName + '</span>';
       // ['low', 'neutral', 'high'].forEach(function(level) {

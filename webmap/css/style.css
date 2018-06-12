@@ -7,22 +7,22 @@
 }
 
 .Male.high {
-  fill: #beaed4;
+  fill: #fdae61;
   fill-opacity: 1;
 }
 
 .Male.low {
-  fill: #fdc086;
+  fill: #2b83ba;
   fill-opacity: 1;
 }
 
 .Female.high {
-  fill: #ffff99;
+  fill: #c2a5cf;
   fill-opacity: 1;
 }
 
 .Female.low {
-  fill: #386cb0;
+  fill: #008837;
   fill-opacity: 1;
 }
 
