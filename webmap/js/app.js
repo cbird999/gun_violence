@@ -119,7 +119,7 @@ function GVMap() {
   };
 
   _gvmap.addToggle = function() {
-    console.log(_groupLabels);
+    // console.log(_groupLabels);
     _toggle = L.control({position: 'topright'});
     _toggle.onAdd = function (map) {
       var div = L.DomUtil.create('div', 'info toggle'),
@@ -359,5 +359,21 @@ var geoJSONFiles = [
     lt: 'Should People with Mental Illness be Allowed to Buy Guns in the US by Income',
     tt: 'Should a person with a mental illness be allowed to buy a gun in the US?',
     groupKey: 'LowMediumIncome'
+}
+loadData(geoJSONFiles, mapObj);
+
+var geoJSONFiles = [
+  './data/states_pop.geojson',
+  './data/white_random_points.geojson',
+  './data/nonwhite_random_points.geojson'
+  ],
+  mapObj = {
+    mapID: 'map5',
+    gl: ['NonWhite', 'White'],
+    gc: [['#e66101', '#5e3c99'],['#ca0020', '#008837']],
+    lkl: ['Not a problem', 'In the middle', 'Is a big problem'],
+    lt: 'How Much of a Problem is Gun Violence in the US by Race',
+    tt: 'How much of a problem is gun violence in the US?',
+    groupKey: 'NonWhite'
 }
 loadData(geoJSONFiles, mapObj);

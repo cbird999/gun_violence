@@ -97,7 +97,8 @@ for (i in 1:nrow(usStatesACS2017sp4236mrg)) {
   #currPew <- genderStrictness %>% filter(F_CREGION_FINAL == region)
   #currPew <- educationWho %>% filter(F_CREGION_FINAL == region)
   #currPew <- politicalType %>% filter(F_CREGION_FINAL == region)
-  currPew <- incomeMentalIllness %>% filter(F_CREGION_FINAL == region)
+  #currPew <- incomeMentalIllness %>% filter(F_CREGION_FINAL == region)
+  currPew <- raceViolence %>% filter(F_CREGION_FINAL == region)
   
   totPts <- 0
   for (i in 1:nrow(currPew)) {
@@ -151,6 +152,12 @@ lowincomeSPDF <- randomSPDF[randomSPDF$group=='LowMediumIncome',]
 highincomeSPDF <- randomSPDF[randomSPDF$group=='HighIncome',]
 geojson_write(lowincomeSPDF, geometry = 'polygon', file = 'json/lowincome_random_points.geojson', overwrite = T)
 geojson_write(highincomeSPDF, geometry = 'polygon', file = 'json/highincome_random_points.geojson', overwrite = T)
+
+### race
+whiteSPDF <- randomSPDF[randomSPDF$group=='White',]
+nonwhiteSPDF <- randomSPDF[randomSPDF$group=='NonWhite',]
+geojson_write(whiteSPDF, geometry = 'polygon', file = 'json/white_random_points.geojson', overwrite = T)
+geojson_write(nonwhiteSPDF, geometry = 'polygon', file = 'json/nonwhite_random_points.geojson', overwrite = T)
 
 ########## may not need this #########
 #usStatesACS2017sf <- st_as_sf(usStatesACS2017)

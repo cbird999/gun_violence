@@ -131,6 +131,28 @@ incomeMentalIllness <- w25 %>%
 
 write_json(x = incomeMentalIllness, 'json/income_mentalillness.json', overwrite = T)
 
+# race/Gun violence
+# F_INCOME_FINAL/GUNVIOLENCEA_W25
+# recode
+raceViolence <- w25 %>%
+  mutate(group = case_when(F_RACETHN_RECRUITMENT == 'White non-Hispanic' ~ 'White',
+                           F_RACETHN_RECRUITMENT == 'Other' ~ 'NonWhite',
+                           F_RACETHN_RECRUITMENT == 'Hispanic' ~ 'NonWhite',
+                           F_RACETHN_RECRUITMENT == 'Black non-Hispanic' ~ 'NonWhite',
+                           F_RACETHN_RECRUITMENT == 'Don\'t know/Refused (VOL.)' ~ 'Other')) %>%
+  filter(group != 'Other', GUNVIOLENCEA_W25 != 'Refused') %>%
+  group_by(F_CREGION_FINAL) %>%
+  mutate(TOT_REGION = sum(TOT_W25)) %>%
+  ungroup() %>%
+  group_by(F_CREGION_FINAL, group, GUNVIOLENCEA_W25) %>% 
+  summarise(per = sum(TOT_W25) / first(TOT_REGION)) %>%
+  mutate(class = case_when(GUNVIOLENCEA_W25 == 'A very big problem' ~ 'high',
+                           GUNVIOLENCEA_W25 == 'Not a problem at all' ~ 'low',
+                           GUNVIOLENCEA_W25 == 'A moderately big problem' ~ 'neutral',
+                           GUNVIOLENCEA_W25 == 'A small problem' ~ 'neutral'),
+         answer = GUNVIOLENCEA_W25)
+
+write_json(x = incomeMentalIllness, 'json/income_mentalillness.json', overwrite = T)
 
 
 

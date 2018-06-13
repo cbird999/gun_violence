@@ -83,6 +83,24 @@ path.Male.high {
   fill-opacity: 1;
 }
 
+/* Race */
+.NonWhite.low {
+  fill: #e66101;
+  fill-opacity: 1;
+}
+.NonWhite.high {
+  fill: #5e3c99;
+  fill-opacity: 1;
+}
+.White.low {
+  fill: #ca0020;
+  fill-opacity: 1;
+}
+.White.high {
+  fill: #008837;
+  fill-opacity: 1;
+}
+
 .neutral {
   fill: #aaa;
   fill-opacity: 1;
