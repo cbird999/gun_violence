@@ -1,5 +1,5 @@
 #map1, #map2, #map3, #map4, #map5 {
-  height: 800px;
+  height: 600px;
 }
 
 /* Bootstrap */
@@ -10,57 +10,58 @@
   margin-bottom: 30px;
 }
 
-./* Gender */
-.Female.high {
+/* Gender */
+path.Female.low {
   fill: #fdae61;
   fill-opacity: 1;
 }
-.Female.low {
+path.Female.high {
   fill: #2b83ba;
   fill-opacity: 1;
 }
-.Male.high {
+path.Male.low {
   fill: #c2a5cf;
   fill-opacity: 1;
 }
-.Male.low {
+path.Male.high {
   fill: #008837;
   fill-opacity: 1;
 }
 
 /* Political */
-.Democrat.high {
-  fill: #fdae61;
-  fill-opacity: 1;
-}
 .Democrat.low {
-  fill: #2b83ba;
+  fill: #e66101;
   fill-opacity: 1;
 }
-.Republican.high {
-  fill: #c2a5cf;
+.Democrat.high {
+  fill: #5e3c99;
   fill-opacity: 1;
 }
 .Republican.low {
-  fill: #008837;
+  fill: #ca0020;
+  fill-opacity: 1;
+}
+.Republican.high {
+  fill: #0571b0;
   fill-opacity: 1;
 }
 
+
 /* College */
-.BelowCollege.high {
-  fill: #fdae61;
-  fill-opacity: 1;
-}
 .BelowCollege.low {
-  fill: #2b83ba;
+  fill: #a6611a;
   fill-opacity: 1;
 }
-.College.high {
-  fill: #c2a5cf;
+.BelowCollege.high {
+  fill: #018571;
   fill-opacity: 1;
 }
 .College.low {
-  fill: #008837;
+  fill: #d01c8b;
+  fill-opacity: 1;
+}
+.College.high {
+  fill: #4dac26;
   fill-opacity: 1;
 }
 

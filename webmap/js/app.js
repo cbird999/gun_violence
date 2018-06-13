@@ -321,12 +321,12 @@ var geoJSONFiles = [
   ],
   mapObj = {
     mapID: 'map2',
-    gl: ['College', 'BelowCollege'],
-    gc: [['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']],
+    gl: ['BelowCollege', 'College'],
+    gc: [['#a6611a', '#018571'],['#d01c8b', '#4dac26']],
     lkl: ['Almost no one', 'In the middle', 'Almost everyone'],
     lt: 'Who Should Own Guns in the US by Education',
     tt: 'Who should be legally allowed to own guns in the US?',
-    groupKey: 'college'
+    groupKey: 'BelowCollege'
 }
 loadData(geoJSONFiles, mapObj);
 
@@ -338,7 +338,7 @@ var geoJSONFiles = [
   mapObj = {
     mapID: 'map3',
     gl: ['Democrat', 'Republican'],
-    gc: [['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']],
+    gc: [['#e66101', '#5e3c99'],['#ca0020', '#0571b0']],
     lkl: ['Almost all types', 'In the middle', 'Almost no types'],
     lt: 'What Kinds of Guns Should be Legal in the US by Political Party',
     tt: 'What types of guns should be legally available to buy in the US?',
