@@ -23,7 +23,8 @@ function GVMap() {
     _groupLabels,
     _groupColors,
     _toggle,
-    _legend;
+    _legend,
+    _tooltipTitle;
 
   _gvmap.renderMap = function(mapID) {
     _map = L.map(mapID, {
@@ -49,6 +50,17 @@ function GVMap() {
           fillOpacity: .9,
           className: 'state'
         }
+      },
+      onEachFeature: function(feature, lyr) {
+        lyr.on('mouseover', function(evt) {
+          this.setStyle({ weight: 4 });
+        });
+        lyr.on('mouseout', function(evt) {
+          this.setStyle({ weight: 2 });
+        });
+        // lyr.on('click', function(evt) {
+        //   _map.fitBounds(this.getBounds());
+        // });
       }
     }).addTo(_map);
     _lyrUS.bringToBack();
@@ -63,6 +75,19 @@ function GVMap() {
           fill: true,
           className: (feature.properties.group + ' ' + feature.properties.class)
         })
+      },
+      onEachFeature: function(feature, lyr) {
+        lyr.on('mouseover', function(evt) {
+          this.setStyle({ stroke: true, weight: 3, color: '#888'});
+        });
+        lyr.on('mouseout', function(evt) {
+          this.setStyle({ stroke: false });
+        });
+        lyr.on('click', function(evt) {
+          this.bindTooltip('<h6>' + _tooltipTitle + '</h6>Group: ' + this.feature.properties.group + '<br>Answer: ' + this.feature.properties.answer, {
+            permanent: false
+          });
+        });
       }
     }).addTo(_map);
 
@@ -75,6 +100,20 @@ function GVMap() {
           fill: true,
           className: (feature.properties.group + ' ' + feature.properties.class)
         })
+      },
+      onEachFeature: function(feature, lyr) {
+        //console.log(feature);
+        lyr.on('mouseover', function(evt) {
+          this.setStyle({ stroke: true, weight: 3, color: '#888'});
+        });
+        lyr.on('mouseout', function(evt) {
+          this.setStyle({ stroke: false });
+        });
+        lyr.on('click', function(evt) {
+          this.bindTooltip('<h6>' + _tooltipTitle + '</h6>Group: ' + this.feature.properties.group + '<br>Answer: ' + this.feature.properties.answer, {
+            permanent: false
+          });
+        });
       }
     }).addTo(_map);
   };
@@ -177,6 +216,12 @@ function GVMap() {
     _legendKeyLabels = keys;
   }
 
+  _gvmap.tooltipTitle = function(title) {
+    if (!arguments.length) return _ltooltipTitle;
+    _tooltipTitle = title;
+  }
+
+
   return(_gvmap);
 };
 
@@ -216,7 +261,7 @@ function loadData(geoJSONFiles, mapObj) {
   geoJSONFiles.forEach(function (file, i) {
     loadFile(file, function (responseText) {
       count += 1;
-      console.log(count, geojsonData);
+      // console.log(count, geojsonData);
       geojsonData[i] = JSON.parse(responseText);
       if (count === geoJSONFiles.length) {
         loadMaps(geojsonData, mapObj);
@@ -228,7 +273,7 @@ function loadData(geoJSONFiles, mapObj) {
 function loadMaps(geojsonData, mapObj) {
   var usData, groupAData, groupBData;
   geojsonData.forEach(function(geojson) {
-    console.log(geojson.features[0].geometry.type);
+    console.log(geojson);//, geojson.features[0].geometry.type);
     if (geojson.features[0].geometry.type === 'MultiPolygon') {
       usData = geojson;
     } else if (geojson.features[0].properties.group === mapObj.groupKey) {
@@ -249,6 +294,7 @@ function loadMaps(geojsonData, mapObj) {
   map.addToggle();
   map.legendTitle(mapObj.lt);
   map.addLegend();
+  map.tooltipTitle(mapObj.tt);
   addEventListeners(mapObj.mapID);
 };
 
@@ -263,6 +309,7 @@ var geoJSONFiles = [
     gc: [['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']],
     lkl: ['Less gun control', 'Laws are about right', 'More gun control'],
     lt: 'Gun Control Strictness by Gender in the United States',
+    tt: 'Do you want more or less strict gun laws?',
     groupKey: 'Female'
 }
 loadData(geoJSONFiles, mapObj);
@@ -274,10 +321,11 @@ var geoJSONFiles = [
   ],
   mapObj = {
     mapID: 'map2',
-    gl: ['college', 'belowcollege'],
+    gl: ['College', 'BelowCollege'],
     gc: [['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']],
-    lkl: ['Almost no one', 'In the middle', 'Almost everyone should'],
+    lkl: ['Almost no one', 'In the middle', 'Almost everyone'],
     lt: 'Who Should Own Guns in the US by Education',
+    tt: 'Who should be legally allowed to own guns in the US?',
     groupKey: 'college'
 }
 loadData(geoJSONFiles, mapObj);
@@ -292,7 +340,8 @@ var geoJSONFiles = [
     gl: ['Democrat', 'Republican'],
     gc: [['#fdae61', '#2b83ba'],['#c2a5cf', '#008837']],
     lkl: ['Almost all types', 'In the middle', 'Almost no types'],
-    lt: 'What Kinds of Guns Should be Legal n the US by Political Party',
+    lt: 'What Kinds of Guns Should be Legal in the US by Political Party',
+    tt: 'What types of guns should be legally available to buy in the US?',
     groupKey: 'Democrat'
 }
 loadData(geoJSONFiles, mapObj);

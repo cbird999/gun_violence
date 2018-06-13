@@ -50,8 +50,9 @@ genderStrictness <- w25 %>%
   mutate(class = case_when(
     GUNSTRICT_W25 == 'Gun laws should be MORE strict than they are today' ~ 'high',
     GUNSTRICT_W25 == 'Gun laws are about right' ~ 'neutral',
-    GUNSTRICT_W25 == 'Gun laws should be LESS strict than they are today' ~ 'low'
-  ))
+    GUNSTRICT_W25 == 'Gun laws should be LESS strict than they are today' ~ 'low'),
+    answer = GUNSTRICT_W25,
+    group = F_SEX_FINAL)
 
 write_json(x = genderStrictness, 'json/gender_strictness.json', overwrite = T)
 
@@ -62,9 +63,9 @@ educationWho <- w25 %>%
   mutate(education = case_when(F_EDUCCAT_FINAL == 'College graduate+' ~ 'College or more',
                                F_EDUCCAT_FINAL == 'Some college' ~ 'Less than college',
                                F_EDUCCAT_FINAL == 'H.S. graduate or less' ~ 'Less than college'),
-         group = case_when(F_EDUCCAT_FINAL == 'College graduate+' ~ 'college',
-                           F_EDUCCAT_FINAL == 'Some college' ~ 'belowcollege',
-                           F_EDUCCAT_FINAL == 'H.S. graduate or less' ~ 'belowcollege')) %>%
+         group = case_when(F_EDUCCAT_FINAL == 'College graduate+' ~ 'College',
+                           F_EDUCCAT_FINAL == 'Some college' ~ 'BelowCollege',
+                           F_EDUCCAT_FINAL == 'H.S. graduate or less' ~ 'BelowCollege')) %>%
   filter(GUNWHO_W25 != 'Refused') %>%
   group_by(F_CREGION_FINAL) %>%
   mutate(TOT_REGION = sum(TOT_W25)) %>%
@@ -74,7 +75,8 @@ educationWho <- w25 %>%
   mutate(class = case_when(GUNWHO_W25 == 'Almost everyone should' ~ 'high',
                            GUNWHO_W25 == 'Almost no one should' ~ 'low',
                            GUNWHO_W25 == 'Some people should, but most people should NOT' ~ 'neutral',
-                           GUNWHO_W25 == 'Most people should, but some people should NOT' ~ 'neutral'))
+                           GUNWHO_W25 == 'Most people should, but some people should NOT' ~ 'neutral'),
+                           answer = GUNWHO_W25)
 
 write_json(x = educationWho, 'json/education_who.json', overwrite = T)
 
@@ -95,7 +97,8 @@ politicalType <- w25 %>%
   mutate(class = case_when(GUNTYPE_W25 == 'Almost all types should' ~ 'high',
                            GUNTYPE_W25 == 'Almost no types should' ~ 'low',
                            GUNTYPE_W25 == 'Some types should, but most types should NOT' ~ 'neutral',
-                           GUNTYPE_W25 == 'Most types should, but some types should NOT' ~ 'neutral'))
+                           GUNTYPE_W25 == 'Most types should, but some types should NOT' ~ 'neutral'),
+                           answer = GUNTYPE_W25)
 
 write_json(x = politicalType, 'json/political_type.json', overwrite = T)
 

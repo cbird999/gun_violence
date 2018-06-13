@@ -2,29 +2,64 @@
   height: 800px;
 }
 
+/* Bootstrap */
 .container-fluid {
   padding: 0 0 10 0;
 }
-
 .row {
   margin-bottom: 30px;
 }
-.Male.high {
+
+./* Gender */
+.Female.high {
   fill: #fdae61;
   fill-opacity: 1;
 }
-
-.Male.low {
+.Female.low {
   fill: #2b83ba;
   fill-opacity: 1;
 }
-
-.Female.high {
+.Male.high {
   fill: #c2a5cf;
   fill-opacity: 1;
 }
+.Male.low {
+  fill: #008837;
+  fill-opacity: 1;
+}
 
-.Female.low {
+/* Political */
+.Democrat.high {
+  fill: #fdae61;
+  fill-opacity: 1;
+}
+.Democrat.low {
+  fill: #2b83ba;
+  fill-opacity: 1;
+}
+.Republican.high {
+  fill: #c2a5cf;
+  fill-opacity: 1;
+}
+.Republican.low {
+  fill: #008837;
+  fill-opacity: 1;
+}
+
+/* College */
+.BelowCollege.high {
+  fill: #fdae61;
+  fill-opacity: 1;
+}
+.BelowCollege.low {
+  fill: #2b83ba;
+  fill-opacity: 1;
+}
+.College.high {
+  fill: #c2a5cf;
+  fill-opacity: 1;
+}
+.College.low {
   fill: #008837;
   fill-opacity: 1;
 }
@@ -55,7 +90,7 @@
   float: left;
   margin-right: 10px;
   display: inline-block;
-  width: 60px;
+  width: 90px;
 }
 
 .legend div {
@@ -69,7 +104,7 @@
 }
 
 .legend .color-bar {
-  width: 100px;
+  width: 110px;
 }
 
 .toggle {
@@ -92,4 +127,8 @@
 
 .toggle ul input {
   margin-right: 10px;
+}
+
+.leaflet-tooltip {
+  background-color: #eee;
 }
