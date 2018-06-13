@@ -34,7 +34,11 @@ function GVMap() {
       maxZoom: 19,
       minZoom: 1,
       dragging: true,
-      attributionControl: false});
+      attributionControl: false,
+      touchZoom: false,
+      tap: false,
+      scrollWheelZoom: false 
+    });
   };
 
   _gvmap.renderLayers = function() {
@@ -52,12 +56,24 @@ function GVMap() {
         }
       },
       onEachFeature: function(feature, lyr) {
+        lyr.on('mouseenter', function(evt) {
+          this.setStyle({ weight: 4 });
+          // this.bindTooltip('<h6>' + feature.properties.NAME, {
+          //   direction: 'right'
+          // });
+        });
         lyr.on('mouseover', function(evt) {
           this.setStyle({ weight: 4 });
+          // this.bindTooltip('<h6>' + feature.properties.NAME, {
+          //   direction: 'right'
+          // });
         });
         lyr.on('mouseout', function(evt) {
           this.setStyle({ weight: 2 });
         });
+        // lyr.bindTooltip('<h6>' + feature.properties.NAME + '</h6>', {
+        //   permanent: true
+        // });
         // lyr.on('click', function(evt) {
         //   _map.fitBounds(this.getBounds());
         // });
