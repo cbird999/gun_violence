@@ -65,6 +65,24 @@ path.Male.high {
   fill-opacity: 1;
 }
 
+/* Income */
+.LowMediumIncome.low {
+  fill: #d7191c;
+  fill-opacity: 1;
+}
+.LowMediumIncome.high {
+  fill: #2b83ba;
+  fill-opacity: 1;
+}
+.HighIncome.low {
+  fill: #e66101;
+  fill-opacity: 1;
+}
+.HighIncome.high {
+  fill: #5e3c99;
+  fill-opacity: 1;
+}
+
 .neutral {
   fill: #aaa;
   fill-opacity: 1;
@@ -91,7 +109,7 @@ path.Male.high {
   float: left;
   margin-right: 10px;
   display: inline-block;
-  width: 90px;
+  width: 120px;
 }
 
 .legend div {

@@ -95,8 +95,9 @@ for (i in 1:nrow(usStatesACS2017sp4236mrg)) {
   answerVec <- character()
   
   #currPew <- genderStrictness %>% filter(F_CREGION_FINAL == region)
-  currPew <- educationWho %>% filter(F_CREGION_FINAL == region)
+  #currPew <- educationWho %>% filter(F_CREGION_FINAL == region)
   #currPew <- politicalType %>% filter(F_CREGION_FINAL == region)
+  currPew <- incomeMentalIllness %>% filter(F_CREGION_FINAL == region)
   
   totPts <- 0
   for (i in 1:nrow(currPew)) {
@@ -144,6 +145,12 @@ democratSPDF <- randomSPDF[randomSPDF$group=='Democrat',]
 republicanSPDF <- randomSPDF[randomSPDF$group=='Republican',]
 geojson_write(democratSPDF, geometry = 'polygon', file = 'json/democrat_random_points.geojson', overwrite = T)
 geojson_write(republicanSPDF, geometry = 'polygon', file = 'json/republican_random_points.geojson', overwrite = T)
+
+### income
+lowincomeSPDF <- randomSPDF[randomSPDF$group=='LowMediumIncome',]
+highincomeSPDF <- randomSPDF[randomSPDF$group=='HighIncome',]
+geojson_write(lowincomeSPDF, geometry = 'polygon', file = 'json/lowincome_random_points.geojson', overwrite = T)
+geojson_write(highincomeSPDF, geometry = 'polygon', file = 'json/highincome_random_points.geojson', overwrite = T)
 
 ########## may not need this #########
 #usStatesACS2017sf <- st_as_sf(usStatesACS2017)

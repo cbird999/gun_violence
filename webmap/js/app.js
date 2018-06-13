@@ -345,3 +345,19 @@ var geoJSONFiles = [
     groupKey: 'Democrat'
 }
 loadData(geoJSONFiles, mapObj);
+
+var geoJSONFiles = [
+  './data/states_pop.geojson',
+  './data/lowincome_random_points.geojson',
+  './data/highincome_random_points.geojson'
+  ],
+  mapObj = {
+    mapID: 'map4',
+    gl: ['LowMediumIncome', 'HighIncome'],
+    gc: [['#d7191c', '#2b83ba'],['#e66101', '#5e3c99']],
+    lkl: ['Strongly oppose', 'In the middle', 'Strongly in favor'],
+    lt: 'Should People with Mental Illness be Allowed to Buy Guns in the US by Income',
+    tt: 'Should a person with a mental illness be allowed to buy a gun in the US?',
+    groupKey: 'LowMediumIncome'
+}
+loadData(geoJSONFiles, mapObj);

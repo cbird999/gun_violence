@@ -103,6 +103,34 @@ politicalType <- w25 %>%
 write_json(x = politicalType, 'json/political_type.json', overwrite = T)
 
 
+# income/Guns for mentally ill
+# F_INCOME_FINAL/GUNPRIORITY1B_W25
+# recode
+incomeMentalIllness <- w25 %>%
+  mutate(group = case_when(F_INCOME_FINAL == 'Less than $10,000' ~ 'LowMediumIncome',
+                           F_INCOME_FINAL == '10 to under $20,000' ~ 'LowMediumIncome',
+                           F_INCOME_FINAL == '20 to under $30,000' ~ 'LowMediumIncome',
+                           F_INCOME_FINAL == '30 to under $40,000' ~ 'LowMediumIncome',
+                           F_INCOME_FINAL == '40 to under $50,0000' ~ 'LowMediumIncome',
+                           F_INCOME_FINAL == '50 to under $75,000' ~ 'LowMediumIncome',
+                           F_INCOME_FINAL == '75 to under $100,000' ~ 'HighIncome',
+                           F_INCOME_FINAL == '100 to under $150,000 [OR]' ~ 'HighIncome',
+                           F_INCOME_FINAL == '$150,000 or more' ~ 'HighIncome',
+                           F_INCOME_FINAL == '(VOL) Don\'t know/Refused' ~ 'Other')) %>%
+  filter(group != 'Other', GUNPRIORITY1B_W25 != 'Refused') %>%
+  group_by(F_CREGION_FINAL) %>%
+  mutate(TOT_REGION = sum(TOT_W25)) %>%
+  ungroup() %>%
+  group_by(F_CREGION_FINAL, group, GUNPRIORITY1B_W25) %>% 
+  summarise(per = sum(TOT_W25) / first(TOT_REGION)) %>%
+  mutate(class = case_when(GUNPRIORITY1B_W25 == 'Strongly favor' ~ 'high',
+                           GUNPRIORITY1B_W25 == 'Strongly oppose' ~ 'low',
+                           GUNPRIORITY1B_W25 == 'Somewhat favor' ~ 'neutral',
+                           GUNPRIORITY1B_W25 == 'Somewhat oppose' ~ 'neutral'),
+         answer = GUNPRIORITY1B_W25)
+
+write_json(x = incomeMentalIllness, 'json/income_mentalillness.json', overwrite = T)
+
 
 
 
