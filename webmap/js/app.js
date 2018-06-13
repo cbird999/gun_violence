@@ -339,7 +339,7 @@ var geoJSONFiles = [
     mapID: 'map3',
     gl: ['Democrat', 'Republican'],
     gc: [['#e66101', '#5e3c99'],['#ca0020', '#0571b0']],
-    lkl: ['Almost all types', 'In the middle', 'Almost no types'],
+    lkl: ['Almost no types', 'In the middle', 'Almost all types'],
     lt: 'What Kinds of Guns Should be Legal in the US by Political Party',
     tt: 'What types of guns should be legally available to buy in the US?',
     groupKey: 'Democrat'
